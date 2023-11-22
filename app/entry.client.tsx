@@ -1,4 +1,3 @@
-// entry.client.tsx
 import React, { useState } from "react";
 import { hydrate } from "react-dom";
 import { CacheProvider } from "@emotion/react";
