@@ -1,12 +1,12 @@
-import { Box, Center, Container, Flex, Image, Text } from "@chakra-ui/react";
-import { useLoaderData } from "@remix-run/react";
+import { Container, Flex, Image, Text } from "@chakra-ui/react";
+import { useLoaderData, useNavigate } from "@remix-run/react";
 import api from "~/services/api";
 
 type CommentType = {
   username: string;
   comment: string;
 };
-type AlbumType = {
+export type AlbumType = {
   id: string;
   title: string;
   username: string;
@@ -20,7 +20,7 @@ export async function loader() {
 }
 export default function Index() {
   const albums: AlbumType[] = useLoaderData();
-  console.log(albums);
+  const navigate = useNavigate();
 
   return (
     <Container
@@ -34,10 +34,15 @@ export default function Index() {
       paddingTop={"64px"}
     >
       {albums.map((album: AlbumType) => (
-        <Flex key={album.id}>
-          <Flex flexDirection="column" textAlign={"center"} gap={"15px"}>
+        <Flex
+          sx={albumStyles}
+          key={album.id}
+          onClick={() => navigate("details", { state: { album } })}
+        >
+          <Flex sx={boxAlbum}>
+            <Image sx={imageStyles} src={album.image} />
             <Text color="white">{album.title}</Text>
-            <Image src={album.image} width={"550px"} height={"800px"} />
+            <Text>{album.username}</Text>
           </Flex>
         </Flex>
       ))}
@@ -60,4 +65,16 @@ const albumStyles = {
   textAlign: "start",
   color: "#fff",
   cursor: "pointer",
+};
+const boxAlbum = {
+  width: "full",
+  flexDirection: "column",
+  textAlign: "center",
+  gap: "15px",
+};
+const imageStyles = {
+  minWidth: "full",
+  minW: "100%",
+  height: "250px",
+  objectFit: "cover",
 };
